@@ -283,34 +283,44 @@
 
   <script>
     // Load dynamic platform config
-    async function loadConfig() {
-      try {
-        const res = await fetch('/api/public/config');
-        const cfg = await res.json();
+// Load dynamic platform config safely
+async function loadConfig() {
+  try {
+    const res = await fetch('/api/public/config');
+    const cfg = await res.json();
 
-        if (cfg.supportPhone) {
-          document.getElementById('navCallBtn').href = `tel:${cfg.supportPhone}`;
-          document.getElementById('navCallText').innerText = `Call ${cfg.supportPhoneDisplay}`;
-          document.getElementById('heroCallLink').href = `tel:${cfg.supportPhone}`;
-          document.getElementById('heroCallDisplay').innerText = `Call Desk: ${cfg.supportPhoneDisplay}`;
-          document.getElementById('footerPhone').innerText = `Phone: ${cfg.supportPhoneDisplay}`;
-        }
+    const phone = cfg.supportPhone || '+919345342361';
+    const display = cfg.supportPhoneDisplay || '+91 93453 42361';
 
-        if (cfg.whatsappNumber) {
-          const wa = document.getElementById('heroWaLink');
-          wa.href = `https://wa.me/${cfg.whatsappNumber}`;
-          wa.classList.remove('hidden');
-        }
-      } catch (e) {
-        console.error('Config fetch failed:', e);
+    // Safely update elements only if they exist in the DOM
+    const navBtn = document.getElementById('navCallBtn');
+    if (navBtn) navBtn.href = `tel:${phone}`;
+
+    const navText = document.getElementById('navCallText');
+    if (navText) navText.innerText = `Call ${display}`;
+
+    const heroLink = document.getElementById('heroCallLink');
+    if (heroLink) heroLink.href = `tel:${phone}`;
+
+    const heroDisplay = document.getElementById('heroCallDisplay');
+    if (heroDisplay) heroDisplay.innerText = `Call Desk: ${display}`;
+
+    const footerPhone = document.getElementById('footerPhone');
+    if (footerPhone) {
+      footerPhone.innerHTML = `<a href="tel:${phone}" class="hover:text-indigo-400 transition">Phone: ${display}</a>`;
+    }
+
+    if (cfg.whatsappNumber) {
+      const wa = document.getElementById('heroWaLink');
+      if (wa) {
+        wa.href = `https://wa.me/${cfg.whatsappNumber}`;
+        wa.classList.remove('hidden');
       }
     }
-
-    function selectServiceCategory(cat) {
-      const select = document.getElementById('categorySelect');
-      select.value = cat;
-      document.getElementById('request-section').scrollIntoView({ behavior: 'smooth' });
-    }
+  } catch (e) {
+    console.error('Config fetch failed:', e);
+  }
+}
 
     // Submit Request
     document.getElementById('taskForm').addEventListener('submit', async (e) => {
