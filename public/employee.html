@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VEDAQ — Service Coordination & Operations Desk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col antialiased">
+
+  <!-- Nav Header -->
+  <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <img src="/images/vedaq-logo.svg" alt="VEDAQ Logo" class="h-8 w-auto brightness-200">
+        <span class="text-slate-400 text-xs font-mono ml-2 border-l border-slate-700 pl-3">OPERATIONS DESK</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button onclick="document.getElementById('intakeModal').classList.remove('hidden')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1">
+          <span>+ Log Intake Call</span>
+        </button>
+        <span id="userStatus" class="text-xs text-slate-300 font-medium"></span>
+        <button id="btnLogout" class="text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg transition">
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Metric Overview Cards -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex-1 w-full space-y-6">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <span class="text-xs uppercase font-semibold text-slate-400">New Submitted</span>
+        <div id="statNew" class="text-2xl font-bold text-amber-600 mt-1">0</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <span class="text-xs uppercase font-semibold text-slate-400">In Progress</span>
+        <div id="statProgress" class="text-2xl font-bold text-blue-600 mt-1">0</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <span class="text-xs uppercase font-semibold text-slate-400">Waiting on Client</span>
+        <div id="statWaiting" class="text-2xl font-bold text-orange-600 mt-1">0</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <span class="text-xs uppercase font-semibold text-slate-400">Overdue / Urgent</span>
+        <div id="statOverdue" class="text-2xl font-bold text-rose-600 mt-1">0</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <span class="text-xs uppercase font-semibold text-slate-400">Completed</span>
+        <div id="statCompleted" class="text-2xl font-bold text-emerald-600 mt-1">0</div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-3 items-center justify-between">
+      <div class="flex-1 flex gap-2 w-full md:w-auto">
+        <input type="text" id="searchInput" placeholder="Search Client, Mobile, or Task Details..." class="w-full md:w-72 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <button id="btnSearch" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition">Filter</button>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
+        <div>
+          <label class="text-xs font-semibold text-slate-500 uppercase mr-1">Category:</label>
+          <select id="categoryFilter" class="px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white">
+            <option value="All">All Pillars</option>
+            <option value="Personal Reminders & Life Management">Personal Reminders</option>
+            <option value="Digital & Application Assistance">Digital & Applications</option>
+            <option value="Entertainment & Experiences">Entertainment & Events</option>
+            <option value="VEDAQ OneCall — Everyday Services">OneCall Everyday</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-500 uppercase mr-1">Status:</label>
+          <select id="statusFilter" class="px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white">
+            <option value="All">All Requests</option>
+            <option value="Submitted">Submitted</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Waiting for User">Waiting for User</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Requests Table -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase">
+            <tr>
+              <th class="px-5 py-3">ID</th>
+              <th class="px-5 py-3">Customer</th>
+              <th class="px-5 py-3">Pillar & Task</th>
+              <th class="px-5 py-3">Status</th>
+              <th class="px-5 py-3">Coordinator</th>
+              <th class="px-5 py-3">Target Date</th>
+              <th class="px-5 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tasksTbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal 1: Log Intake Call on Customer Behalf -->
+  <div id="intakeModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-base font-bold text-slate-900">Log Phone Intake Call</h3>
+        <button onclick="document.getElementById('intakeModal').classList.add('hidden')" class="text-slate-400 text-xl font-bold">&times;</button>
+      </div>
+      <form id="intakeForm" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600">Caller Full Name</label>
+          <input type="text" id="intakeName" required class="w-full text-xs p-2 border rounded-lg">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600">Caller Mobile</label>
+          <input type="text" id="intakeMobile" required class="w-full text-xs p-2 border rounded-lg">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600">Service Category</label>
+          <select id="intakeCategory" class="w-full text-xs p-2 border rounded-lg bg-white">
+            <option value="Personal Reminders & Life Management">Personal Reminders & Life Management</option>
+            <option value="Digital & Application Assistance">Digital & Application Assistance</option>
+            <option value="Entertainment & Experiences">Entertainment & Experiences</option>
+            <option value="VEDAQ OneCall — Everyday Services">VEDAQ OneCall — Everyday Services</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600">Requirements & Scope</label>
+          <textarea id="intakeTask" rows="3" required class="w-full text-xs p-2 border rounded-lg"></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600">Due Date</label>
+            <input type="date" id="intakeDueDate" class="w-full text-xs p-2 border rounded-lg">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600">Estimated Cost (if applicable)</label>
+            <input type="text" id="intakeCost" placeholder="e.g. ₹450" class="w-full text-xs p-2 border rounded-lg">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600">Internal Coordinator Notes (Staff Only)</label>
+          <input type="text" id="intakeNotes" placeholder="Vendor chosen, caller special instructions" class="w-full text-xs p-2 border rounded-lg">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="document.getElementById('intakeModal').classList.add('hidden')" class="px-3 py-1.5 border rounded-lg text-xs">Cancel</button>
+          <button type="submit" class="px-4 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-semibold">Save & Take Ownership</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Manage Request & Coordination History -->
+  <div id="detailModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 space-y-5 shadow-2xl max-h-[90vh] flex flex-col">
+      <div class="flex items-start justify-between border-b border-slate-200 pb-3">
+        <div>
+          <span id="modalTaskId" class="text-xs font-mono font-bold text-slate-400">#000</span>
+          <h3 id="modalTaskTitle" class="text-base font-bold text-slate-900">Task Details</h3>
+        </div>
+        <button id="modalClose" class="text-slate-400 hover:text-slate-600 text-2xl font-bold">&times;</button>
+      </div>
+
+      <div class="overflow-y-auto space-y-5 pr-1 flex-1">
+        <!-- Workflow & Coordination Controls -->
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Status</label>
+            <select id="modalStatus" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white">
+              <option value="Submitted">Submitted</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Waiting for User">Waiting for User</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Assigned Coordinator</label>
+            <select id="modalAssignee" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white"></select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Due Date</label>
+            <input type="date" id="modalDueDate" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Est. Cost</label>
+            <input type="text" id="modalCost" placeholder="e.g. ₹600" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Customer Approval</label>
+            <select id="modalApproval" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white">
+              <option value="Not Required">Not Required</option>
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+              <option value="Declined">Declined</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Category</label>
+            <select id="modalCategory" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white">
+              <option value="Personal Reminders & Life Management">Personal Reminders</option>
+              <option value="Digital & Application Assistance">Digital & Applications</option>
+              <option value="Entertainment & Experiences">Entertainment & Events</option>
+              <option value="VEDAQ OneCall — Everyday Services">OneCall Everyday</option>
+            </select>
+          </div>
+          <div class="md:col-span-3">
+            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Internal Notes (Staff Only)</label>
+            <input type="text" id="modalInternalNotes" placeholder="Vendor contact, call details, coordination steps" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white">
+          </div>
+          <div class="md:col-span-3 flex justify-end">
+            <button id="btnSaveWorkflow" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg">Save Coordination Changes</button>
+          </div>
+        </div>
+
+        <!-- Post Customer-Facing Update / Reminder -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-3">
+          <h4 class="text-xs font-bold uppercase text-slate-700">Publish Customer Update / Action Requirement</h4>
+          <textarea id="modalReminderMsg" rows="2" placeholder="Note displayed on customer timeline..." class="w-full text-xs p-2 border border-slate-300 rounded-lg"></textarea>
+          <input type="text" id="modalActionReq" placeholder="Customer action needed (e.g. Send Aadhaar OTP, Confirm pharmacy address)..." class="w-full text-xs p-2 border border-slate-300 rounded-lg">
+          <div class="flex items-center justify-between">
+            <label class="inline-flex items-center text-xs text-slate-600 cursor-pointer">
+              <input type="checkbox" id="modalSetWaiting" class="mr-1.5 rounded text-indigo-600"> Mark status "Waiting for User"
+            </label>
+            <button id="btnPostReminder" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg">Publish Update</button>
+          </div>
+        </div>
+
+        <!-- Audit History -->
+        <div class="space-y-2">
+          <h4 class="text-xs font-bold uppercase text-slate-700">Coordination Audit Trail</h4>
+          <div id="modalActivityLog" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let activeTaskId = null;
+    let teamMembers = [];
+
+    async function checkAuthAndLoad() {
+      try {
+        const authRes = await fetch('/api/auth/session');
+        const authData = await authRes.json();
+        if (!authData.authenticated) {
+          window.location.href = '/login.html';
+          return;
+        }
+
+        document.getElementById('userStatus').innerText = `${authData.employee.name} (${authData.employee.role})`;
+
+        const teamRes = await fetch('/api/employee/team');
+        const teamData = await teamRes.json();
+        teamMembers = teamData.team || [];
+
+        loadDashboard();
+      } catch (e) {
+        console.error('Init error:', e);
+      }
+    }
+
+    async function loadDashboard() {
+      const searchVal = document.getElementById('searchInput').value.trim();
+      const statusVal = document.getElementById('statusFilter').value;
+      const categoryVal = document.getElementById('categoryFilter').value;
+
+      const params = new URLSearchParams();
+      if (searchVal) params.append('search', searchVal);
+      if (statusVal && statusVal !== 'All') params.append('status', statusVal);
+      if (categoryVal && categoryVal !== 'All') params.append('category', categoryVal);
+
+      const tbody = document.getElementById('tasksTbody');
+      tbody.innerHTML = `<tr><td colspan="7" class="px-5 py-8 text-center text-slate-400">Loading service requests...</td></tr>`;
+
+      try {
+        const res = await fetch(`/api/employee/dashboard?${params.toString()}`);
+        if (res.status === 401) return window.location.href = '/login.html';
+        const data = await res.json();
+
+        document.getElementById('statNew').innerText = data.stats?.count_new || 0;
+        document.getElementById('statProgress').innerText = data.stats?.count_progress || 0;
+        document.getElementById('statWaiting').innerText = data.stats?.count_waiting || 0;
+        document.getElementById('statOverdue').innerText = data.stats?.count_overdue || 0;
+        document.getElementById('statCompleted').innerText = data.stats?.count_completed || 0;
+
+        if (!data.tasks || data.tasks.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" class="px-5 py-8 text-center text-slate-400">No requests found.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = data.tasks.map(t => {
+          const safeStatus = (t.status || 'Submitted').replace(/\s+/g, '');
+          return `
+            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+              <td class="px-5 py-3 font-mono text-xs text-slate-400">#${t.id}</td>
+              <td class="px-5 py-3">
+                <div class="font-semibold text-slate-900">${t.user_name}</div>
+                <div class="text-xs font-mono text-slate-400">${t.mobile_number}</div>
+              </td>
+              <td class="px-5 py-3 text-xs max-w-xs truncate">
+                <span class="inline-block font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded text-[10px] mb-1">${t.category}</span>
+                <div class="text-slate-800">${t.task_description}</div>
+              </td>
+              <td class="px-5 py-3"><span class="status-badge status-${safeStatus}">${t.status}</span></td>
+              <td class="px-5 py-3 text-xs text-slate-600">${t.assigned_to_name || '<span class="text-slate-400 italic">Unassigned</span>'}</td>
+              <td class="px-5 py-3 text-xs text-slate-500">${t.due_date || '—'}</td>
+              <td class="px-5 py-3 text-right">
+                <button onclick="openDetail(${t.id})" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-lg border border-slate-200">
+                  Manage
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="7" class="px-5 py-6 text-center text-rose-500">Failed to load desk data.</td></tr>`;
+      }
+    }
+
+    async function openDetail(id) {
+      activeTaskId = id;
+      try {
+        const res = await fetch(`/api/employee/tasks/${id}`);
+        const data = await res.json();
+        const t = data.task;
+
+        document.getElementById('modalTaskId').innerText = `#${t.id}`;
+        document.getElementById('modalTaskTitle').innerText = `${t.user_name} (${t.mobile_number})`;
+        document.getElementById('modalStatus').value = t.status;
+        document.getElementById('modalDueDate').value = t.due_date || '';
+        document.getElementById('modalCost').value = t.estimated_cost || '';
+        document.getElementById('modalApproval').value = t.customer_approval || 'Not Required';
+        document.getElementById('modalInternalNotes').value = t.internal_notes || '';
+        document.getElementById('modalCategory').value = t.category;
+
+        const assignSelect = document.getElementById('modalAssignee');
+        assignSelect.innerHTML = `<option value="">-- Unassigned --</option>` + teamMembers.map(m => 
+          `<option value="${m.id}" ${t.assigned_to_id == m.id ? 'selected' : ''}>${m.name} (${m.role})</option>`
+        ).join('');
+
+        const logContainer = document.getElementById('modalActivityLog');
+        logContainer.innerHTML = (data.logs || []).map(l => `
+          <div class="border-l-2 border-slate-300 pl-2.5 py-1 text-xs">
+            <div class="text-slate-700"><span class="font-semibold">${l.actor_name} (${l.actor_role}):</span> ${l.details}</div>
+            <div class="text-[10px] text-slate-400">${new Date(l.created_at).toLocaleString()}</div>
+          </div>
+        `).join('');
+
+        document.getElementById('detailModal').classList.remove('hidden');
+      } catch (err) {
+        alert('Unable to load request details.');
+      }
+    }
+
+    // Modal Events
+    document.getElementById('modalClose').addEventListener('click', () => {
+      document.getElementById('detailModal').classList.add('hidden');
+    });
+
+    document.getElementById('btnSaveWorkflow').addEventListener('click', async () => {
+      const status = document.getElementById('modalStatus').value;
+      const assigned_to_id = document.getElementById('modalAssignee').value || null;
+      const due_date = document.getElementById('modalDueDate').value || null;
+      const estimated_cost = document.getElementById('modalCost').value.trim();
+      const customer_approval = document.getElementById('modalApproval').value;
+      const internal_notes = document.getElementById('modalInternalNotes').value.trim();
+      const category = document.getElementById('modalCategory').value;
+
+      const res = await fetch(`/api/employee/tasks/${activeTaskId}/workflow`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status, assigned_to_id, due_date, estimated_cost, customer_approval, internal_notes, category })
+      });
+
+      if (res.ok) {
+        openDetail(activeTaskId);
+        loadDashboard();
+      } else {
+        alert('Update failed');
+      }
+    });
+
+    document.getElementById('btnPostReminder').addEventListener('click', async () => {
+      const message = document.getElementById('modalReminderMsg').value;
+      const action_required = document.getElementById('modalActionReq').value;
+      const change_status_waiting = document.getElementById('modalSetWaiting').checked;
+
+      if (!message.trim()) return alert('Please enter message text');
+
+      const res = await fetch(`/api/employee/tasks/${activeTaskId}/reminders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, action_required, change_status_waiting })
+      });
+
+      if (res.ok) {
+        document.getElementById('modalReminderMsg').value = '';
+        document.getElementById('modalActionReq').value = '';
+        document.getElementById('modalSetWaiting').checked = false;
+        openDetail(activeTaskId);
+        loadDashboard();
+      } else {
+        alert('Failed to publish update');
+      }
+    });
+
+    // Log Intake Call Form
+    document.getElementById('intakeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('intakeName').value;
+      const mobile = document.getElementById('intakeMobile').value;
+      const category = document.getElementById('intakeCategory').value;
+      const task = document.getElementById('intakeTask').value;
+      const due_date = document.getElementById('intakeDueDate').value;
+      const estimated_cost = document.getElementById('intakeCost').value;
+      const internal_notes = document.getElementById('intakeNotes').value;
+
+      const res = await fetch('/api/employee/tasks/create-on-behalf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, mobile, category, task, due_date, estimated_cost, internal_notes })
+      });
+
+      if (res.ok) {
+        document.getElementById('intakeModal').classList.add('hidden');
+        document.getElementById('intakeForm').reset();
+        loadDashboard();
+      } else {
+        alert('Failed to create intake request.');
+      }
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.href = '/login.html';
+    });
+
+    document.getElementById('btnSearch').addEventListener('click', loadDashboard);
+    document.getElementById('statusFilter').addEventListener('change', loadDashboard);
+    document.getElementById('categoryFilter').addEventListener('change', loadDashboard);
+
+    window.addEventListener('DOMContentLoaded', checkAuthAndLoad);
+  </script>
+</body>
+</html>

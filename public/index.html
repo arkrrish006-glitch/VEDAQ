@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VEDAQ — Personal Assistance & Service Coordination Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- Main Navigation -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <a href="/" class="flex items-center space-x-3">
+          <img src="/images/vedaq-logo.svg" alt="VEDAQ Logo" class="h-10 w-40 object-contain" onerror="this.style.display='none'; document.getElementById('logoFallback').classList.remove('hidden');">
+          <span id="logoFallback" class="hidden text-2xl font-black tracking-tight text-indigo-700">VEDAQ</span>
+        </a>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
+        <a href="#services" class="hover:text-indigo-600 transition">Services</a>
+        <a href="#how-it-works" class="hover:text-indigo-600 transition">How It Works</a>
+        <a href="#request-section" class="hover:text-indigo-600 transition">Submit Request</a>
+        <a href="#tracking-section" class="hover:text-indigo-600 transition">Track Request</a>
+      </nav>
+
+      <div class="flex items-center space-x-3">
+        <!-- Prominent Call Button -->
+        <a id="heroCallLink" href="tel:" class="px-6 py-3.5 bg-white/10 hover:bg-white/15 text-white border border-white/20 font-semibold rounded-xl text-sm backdrop-blur-sm transition flex items-center gap-2.5">
+          <svg class="w-4 h-4 text-emerald-400 fill-current" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.72 11.72 0 003.68.59 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.72 11.72 0 00.59 3.68 1 1 0 01-.24 1.02l-2.23 2.09z"/></svg>
+          <span id="heroCallDisplay">Call: Desk Configuration Pending</span>
+        </a>
+        <a href="/login.html" class="text-xs font-semibold text-slate-500 hover:text-indigo-600 border border-slate-200 px-3 py-2 rounded-full transition">
+          Operations
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-b from-indigo-950 via-slate-900 to-slate-900 text-white py-20 px-4 sm:px-6 overflow-hidden">
+    <div class="max-w-5xl mx-auto text-center relative z-10 space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-xs font-semibold uppercase tracking-wider">
+        <span>Personal Assistance & Coordination</span>
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+        One point of contact for all your essential tasks.
+      </h1>
+      <p class="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
+        VEDAQ coordinates appointments, official applications, timely reminders, and everyday services through dedicated personal coordinators.
+      </p>
+
+      <!-- Primary Action & Direct Contact Row -->
+      <div class="pt-4 flex flex-wrap items-center justify-center gap-4">
+        <a href="#request-section" class="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-sm shadow-lg shadow-indigo-600/30 transition">
+          Submit Service Request
+        </a>
+
+        <!-- Configurable Direct Call Button -->
+        <a id="heroCallLink" href="tel:" class="px-6 py-3.5 bg-white/10 hover:bg-white/15 text-white border border-white/20 font-semibold rounded-xl text-sm backdrop-blur-sm transition flex items-center gap-2.5">
+          <svg class="w-4 h-4 text-emerald-400 fill-current" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.72 11.72 0 003.68.59 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.72 11.72 0 00.59 3.68 1 1 0 01-.24 1.02l-2.23 2.09z"/></svg>
+          <span id="heroCallDisplay">Call: Desk Configuration Pending</span>
+        </a>
+
+        <!-- WhatsApp Option -->
+        <a id="heroWaLink" href="#" target="_blank" class="hidden px-6 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-sm shadow-md transition flex items-center gap-2">
+          <span>WhatsApp Assistance</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Service Pillars Grid -->
+  <section id="services" class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
+    <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+      <span class="text-xs font-bold uppercase tracking-widest text-indigo-600">Complete Coordination Coverage</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Our Four Service Pillars</h2>
+      <p class="text-slate-600 text-base">We assign dedicated staff to follow through on your requests until completion.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      
+      <!-- Pillar A -->
+      <div class="bg-white p-7 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Personal Reminders & Life Management</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Never miss renewals, statutory deadlines, or health appointments. Scheduled through our desk with personalized agent follow-up.
+          </p>
+        </div>
+        <button onclick="selectServiceCategory('Personal Reminders & Life Management')" class="mt-6 text-xs font-bold text-indigo-600 hover:text-indigo-800 text-left">
+          Request Reminder &rarr;
+        </button>
+      </div>
+
+      <!-- Pillar B -->
+      <div class="bg-white p-7 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Digital & Application Assistance</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Guidance for government certificates (OBC, community, domicile), exam registrations, and official document submissions.
+          </p>
+        </div>
+        <button onclick="selectServiceCategory('Digital & Application Assistance')" class="mt-6 text-xs font-bold text-indigo-600 hover:text-indigo-800 text-left">
+          Get Application Help &rarr;
+        </button>
+      </div>
+
+      <!-- Pillar C -->
+      <div class="bg-white p-7 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Entertainment & Experiences</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Movie ticket advance opening notifications, premier tracking, and leisure booking coordination for your selected city or venue.
+          </p>
+        </div>
+        <button onclick="selectServiceCategory('Entertainment & Experiences')" class="mt-6 text-xs font-bold text-indigo-600 hover:text-indigo-800 text-left">
+          Set Event Alert &rarr;
+        </button>
+      </div>
+
+      <!-- Pillar D -->
+      <div class="bg-white p-7 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">VEDAQ OneCall — Everyday Services</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Personal coordination for everyday needs—groceries, food orders, or locating licensed healthcare clinics—fulfilled via verified external providers.
+          </p>
+        </div>
+        <button onclick="selectServiceCategory('VEDAQ OneCall — Everyday Services')" class="mt-6 text-xs font-bold text-indigo-600 hover:text-indigo-800 text-left">
+          Request Service &rarr;
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="bg-slate-100 border-y border-slate-200 py-16 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">How VEDAQ Works</h2>
+        <p class="text-sm text-slate-600 mt-2">Personal service execution handled by trained human operators.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+        <div class="p-4 space-y-2">
+          <div class="w-10 h-10 mx-auto rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center">1</div>
+          <h4 class="font-bold text-sm text-slate-800">Submit or Call</h4>
+          <p class="text-xs text-slate-500">Contact us via phone or submit your request using the portal form.</p>
+        </div>
+        <div class="p-4 space-y-2">
+          <div class="w-10 h-10 mx-auto rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center">2</div>
+          <h4 class="font-bold text-sm text-slate-800">Specialist Intake</h4>
+          <p class="text-xs text-slate-500">An operator reviews requirements, estimated costs, and required documents.</p>
+        </div>
+        <div class="p-4 space-y-2">
+          <div class="w-10 h-10 mx-auto rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center">3</div>
+          <h4 class="font-bold text-sm text-slate-800">Your Approval</h4>
+          <p class="text-xs text-slate-500">For bookings or purchases, you review and approve estimated costs prior to action.</p>
+        </div>
+        <div class="p-4 space-y-2">
+          <div class="w-10 h-10 mx-auto rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center">4</div>
+          <h4 class="font-bold text-sm text-slate-800">Resolution & Closure</h4>
+          <p class="text-xs text-slate-500">Our coordinator finishes the task and posts direct confirmation to your timeline.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Customer Desk: Request & Tracking -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 lg:grid-cols-12 gap-10 w-full" id="request-section">
+    
+    <!-- Submit Request Column -->
+    <div class="lg:col-span-5 space-y-6">
+      <div class="bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm">
+        <h3 class="text-xl font-bold text-slate-900">Submit a Service Request</h3>
+        <p class="text-xs text-slate-500 mt-1 mb-6">Our coordination desk handles processing and follow-up.</p>
+
+        <form id="taskForm" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Service Category</label>
+            <select id="categorySelect" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="Personal Reminders & Life Management">Personal Reminders & Life Management</option>
+              <option value="Digital & Application Assistance" selected>Digital & Application Assistance</option>
+              <option value="Entertainment & Experiences">Entertainment & Experiences</option>
+              <option value="VEDAQ OneCall — Everyday Services">VEDAQ OneCall — Everyday Services</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Full Name</label>
+            <input type="text" id="name" required placeholder="Enter your full name" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Mobile Contact Number</label>
+            <input type="text" id="mobile" required placeholder="Enter your 10-digit contact number" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <span class="text-[11px] text-slate-400">Acts as your tracking key to review coordinator updates.</span>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Request Details</label>
+            <textarea id="task" rows="4" required placeholder="Specify your request: e.g. OBC certificate procedure, doctor appointment, grocery coordination..." class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+            <p class="text-[11px] text-amber-600 mt-1">Never include passwords, ATM PINs, or banking OTPs in your request.</p>
+          </div>
+
+          <button type="submit" id="btnSubmit" class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm shadow-sm transition">
+            Send Request to Coordination Desk
+          </button>
+        </form>
+
+        <div id="submitNotice" class="mt-4 hidden p-3 rounded-lg text-xs font-medium"></div>
+      </div>
+    </div>
+
+    <!-- Live Request Tracking Column -->
+    <div class="lg:col-span-7 space-y-6" id="tracking-section">
+      <div class="bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm">
+        <h3 class="text-xl font-bold text-slate-900">Track Active & Past Requests</h3>
+        <p class="text-xs text-slate-500 mt-1 mb-4">Enter your mobile number to view specialist updates, approvals, and completion timelines.</p>
+        
+        <div class="flex gap-2">
+          <input type="text" id="lookupMobile" placeholder="Enter mobile number (e.g. 9999999999)" class="flex-1 px-3.5 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <button id="btnTrack" class="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2 rounded-lg text-sm font-semibold transition shrink-0">
+            Find Records
+          </button>
+        </div>
+      </div>
+
+      <!-- Feed of Results -->
+      <div id="requestsFeed" class="space-y-4">
+        <div class="p-10 text-center bg-white rounded-2xl border border-dashed border-slate-200 text-slate-400 text-sm">
+          Enter your mobile number above to review all services requested with VEDAQ.
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-white border-t border-slate-800 py-12 px-4 sm:px-6 mt-auto">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-xs text-slate-400">
+      <div class="space-y-3 md:col-span-2">
+        <img src="/images/vedaq-logo.svg" alt="VEDAQ Logo" class="h-8 w-32 object-contain brightness-200">
+        <p class="max-w-sm text-slate-400 leading-relaxed">
+          VEDAQ coordinates external services and assists customers through structured human oversight. External ordering and bookings are subject to vendor terms.
+        </p>
+      </div>
+      <div>
+        <h5 class="font-bold text-white uppercase tracking-wider mb-3">Service Pillars</h5>
+        <ul class="space-y-1.5">
+          <li>Personal Reminders & Life Management</li>
+          <li>Digital & Application Assistance</li>
+          <li>Entertainment & Experiences</li>
+          <li>VEDAQ OneCall Everyday Services</li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-bold text-white uppercase tracking-wider mb-3">Customer Support</h5>
+        <p id="footerPhone"><a href="tel:+919345342361" class="hover:text-indigo-400 transition">Phone: +91 93453 42361</a></p>
+        <p class="mt-1 text-slate-500">Hours: Operations desk active 8 AM – 8 PM</p>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto border-t border-slate-800 pt-6 text-center text-xs text-slate-500">
+      &copy; 2026 VEDAQ Platform. All rights reserved. Real human coordination.
+    </div>
+  </footer>
+
+  <script>
+    // Load dynamic platform config
+    async function loadConfig() {
+      try {
+        const res = await fetch('/api/public/config');
+        const cfg = await res.json();
+
+        if (cfg.supportPhone) {
+          document.getElementById('navCallBtn').href = `tel:${cfg.supportPhone}`;
+          document.getElementById('navCallText').innerText = `Call ${cfg.supportPhoneDisplay}`;
+          document.getElementById('heroCallLink').href = `tel:${cfg.supportPhone}`;
+          document.getElementById('heroCallDisplay').innerText = `Call Desk: ${cfg.supportPhoneDisplay}`;
+          document.getElementById('footerPhone').innerText = `Phone: ${cfg.supportPhoneDisplay}`;
+        }
+
+        if (cfg.whatsappNumber) {
+          const wa = document.getElementById('heroWaLink');
+          wa.href = `https://wa.me/${cfg.whatsappNumber}`;
+          wa.classList.remove('hidden');
+        }
+      } catch (e) {
+        console.error('Config fetch failed:', e);
+      }
+    }
+
+    function selectServiceCategory(cat) {
+      const select = document.getElementById('categorySelect');
+      select.value = cat;
+      document.getElementById('request-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Submit Request
+    document.getElementById('taskForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const notice = document.getElementById('submitNotice');
+      notice.classList.add('hidden');
+
+      const name = document.getElementById('name').value;
+      const mobile = document.getElementById('mobile').value;
+      const category = document.getElementById('categorySelect').value;
+      const task = document.getElementById('task').value;
+
+      try {
+        const res = await fetch('/api/user/tasks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, mobile, category, task })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Submission failed');
+
+        notice.className = 'mt-4 p-3 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 block';
+        notice.innerText = `Request #${data.taskId} logged under ${category}. A coordinator will review it shortly.`;
+        document.getElementById('task').value = '';
+        document.getElementById('lookupMobile').value = mobile;
+        fetchClientRequests(mobile);
+      } catch (err) {
+        notice.className = 'mt-4 p-3 rounded-lg text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200 block';
+        notice.innerText = err.message;
+      }
+    });
+
+    document.getElementById('btnTrack').addEventListener('click', () => {
+      const mobile = document.getElementById('lookupMobile').value.trim();
+      if (!mobile) return alert('Please enter your mobile number');
+      fetchClientRequests(mobile);
+    });
+
+    async function fetchClientRequests(mobile) {
+      const feed = document.getElementById('requestsFeed');
+      feed.innerHTML = `<div class="p-6 text-center text-slate-400 text-sm bg-white rounded-2xl border border-slate-200">Loading service records...</div>`;
+
+      try {
+        const res = await fetch(`/api/user/tasks?mobile=${encodeURIComponent(mobile)}`);
+        const data = await res.json();
+
+        if (!data.tasks || data.tasks.length === 0) {
+          feed.innerHTML = `<div class="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-500 text-sm">No requests found under <strong>${mobile}</strong>.</div>`;
+          return;
+        }
+
+        feed.innerHTML = data.tasks.map(t => {
+          const safeStatus = (t.status || 'Submitted').replace(/\s+/g, '');
+          const isApprovalNeeded = t.customer_approval === 'Pending';
+
+          return `
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                <div>
+                  <span class="text-xs font-mono font-bold text-slate-400">#${t.id}</span>
+                  <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 ml-2">${t.category}</span>
+                </div>
+                <span class="status-badge status-${safeStatus}">${t.status}</span>
+              </div>
+
+              <div>
+                <p class="text-sm font-semibold text-slate-900 leading-relaxed">${t.task_description}</p>
+                <div class="flex flex-wrap gap-4 text-xs text-slate-500 mt-2">
+                  <div>Coordinator: <span class="font-medium text-slate-800">${t.assigned_to_name || 'Desk Triage'}</span></div>
+                  ${t.due_date ? `<div>Scheduled Target: <span class="font-medium text-slate-800">${t.due_date}</span></div>` : ''}
+                  ${t.estimated_cost ? `<div>Estimated Cost: <span class="font-bold text-emerald-700">${t.estimated_cost}</span></div>` : ''}
+                </div>
+              </div>
+
+              <!-- Customer Approval Box for OneCall / Bookings -->
+              ${isApprovalNeeded ? `
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs space-y-2">
+                  <div class="font-bold text-amber-900">Authorization Required for Order / Booking</div>
+                  <p class="text-amber-800">Your coordinator has provided estimated details (${t.estimated_cost || 'Cost specified in notes'}). Please confirm if you approve proceeding.</p>
+                  <div class="flex gap-2 pt-1">
+                    <button onclick="submitApproval(${t.id}, 'Approved', '${t.mobile_number}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg">Approve Order/Booking</button>
+                    <button onclick="submitApproval(${t.id}, 'Declined', '${t.mobile_number}')" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg">Decline</button>
+                  </div>
+                </div>
+              ` : ''}
+
+              <!-- Updates Timeline -->
+              <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 space-y-3">
+                <span class="text-[11px] font-bold tracking-wider text-slate-400 uppercase block">Coordinator Updates</span>
+                ${t.reminders && t.reminders.length > 0 ? `
+                  <div class="space-y-3 border-l-2 border-indigo-400 pl-3">
+                    ${t.reminders.map(r => `
+                      <div class="text-xs space-y-1">
+                        <div class="font-medium text-slate-800">${r.message}</div>
+                        ${r.action_required ? `<div class="text-amber-800 font-semibold bg-amber-100/60 px-2 py-0.5 rounded inline-block">Action Required: ${r.action_required}</div>` : ''}
+                        <div class="text-[10px] text-slate-400">${r.employee_name} &bull; ${new Date(r.created_at).toLocaleString()}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : `<p class="text-xs text-slate-400 italic">No notes logged yet. Desk is reviewing your request.</p>`}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        feed.innerHTML = `<div class="p-4 bg-rose-50 text-rose-700 rounded-xl text-sm">Failed to retrieve records.</div>`;
+      }
+    }
+
+    async function submitApproval(id, decision, mobile) {
+      try {
+        const res = await fetch(`/api/user/tasks/${id}/approval`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ approval: decision, mobile })
+        });
+        if (res.ok) {
+          fetchClientRequests(mobile);
+        } else {
+          alert('Failed to update decision.');
+        }
+      } catch (e) {
+        alert('Network error.');
+      }
+    }
+
+    loadConfig();
+  </script>
+</body>
+</html>
